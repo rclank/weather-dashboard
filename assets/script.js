@@ -33,18 +33,17 @@ const formSubmitHandler = function(event) {
 searchFormEl.addEventListener("submit", formSubmitHandler);
 
 const getCityWeather = function(city) {
-    let weatherData;
-
     // i tried to assign to variable originally, but learned this does not work with promises/async functions
+    // even if i declared the variable first, seemed like the async took too long
+    // let coordinates;
     // const coordinates = geocodeSearch(city);
     geocodeSearch(city);
-    console.log(weatherData);
 
 
     console.log(city);
 }
 
-const geocodeSearch = function(searchInput) {
+const geocodeSearch = async function(searchInput) {
     // try as i might, i could not get the api url to work according to documentation
     // it accepts 2 more parameters, state code and country code, but neither seemed to affect output?
     const geoApiUrl = "http://api.openweathermap.org/geo/1.0/direct?q=" + searchInput + "&appid=" + apiKey;
@@ -62,7 +61,7 @@ const geocodeSearch = function(searchInput) {
                     }
                 })
             } else {
-                alert("I'm not sure when this would run?");
+                alert("Bad api url. Please try again!");
             }
         })
         .catch(function(error) {
@@ -76,8 +75,20 @@ const checkWeather = function(geoData) {
 
     fetch(weatherUrl)
         .then(function(response) {
-            return response.json();
-        }).then(function(data) {
-            weatherData = data;
+            if (response.ok) {
+                response.json().then(function(data) {
+                    // call next function
+                    buildDashboard(data);
+                });
+            } else {
+                alert("Bad api url. Please try again!");
+            }
+        }).catch(function(error) {
+            alert("Unable to connect to OpenWeatherMap: " + error);
         })
+}
+
+const buildDashboard = function(cityWeatherData) {
+    console.log('buildDashboard', cityWeatherData);
+
 }
