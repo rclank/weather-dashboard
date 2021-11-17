@@ -14,13 +14,15 @@ const cityInputEl = document.querySelector('#search');
 // variables
 const apiKey = "b91170236f07db86ffa15047cc1bb3bb";
 const usaIsoCode = '840';
+let city;
+let today;
 
 // upon search
 const formSubmitHandler = function(event) {
     event.preventDefault();
 
     // get searched city
-    let city = cityInputEl.value.trim();
+    city = cityInputEl.value.trim();
 
     if (city) {
         getCityWeather(city);
@@ -71,7 +73,7 @@ const geocodeSearch = async function(searchInput) {
 
 const checkWeather = function(geoData) {
     console.log(geoData);
-    const weatherUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${geoData[0].lat}&lon=${geoData[0].lon}&exclude=minutely,hourly,alerts&appid=${apiKey}`;
+    const weatherUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${geoData[0].lat}&lon=${geoData[0].lon}&exclude=minutely,hourly,alerts&units=imperial&appid=${apiKey}`;
 
     fetch(weatherUrl)
         .then(function(response) {
@@ -88,7 +90,38 @@ const checkWeather = function(geoData) {
         })
 }
 
-const buildDashboard = function(cityWeatherData) {
-    console.log('buildDashboard', cityWeatherData);
+// DOM elements
+const weatherDashboardEl = document.querySelector('#dashboard');
+// const weatherTodayCardEl = document.querySelector('#weather-today');
+// const forecastContainerEl = document.querySelector('#forecast');
 
+
+const buildDashboard = function(cityWeatherData) {
+
+    console.log('city weather', cityWeatherData);
+    buildWeatherToday(cityWeatherData);
+
+    // buildForecast(cityWeatherData);
 }
+
+const dateFormat = 'today.getDate()/today.getMonth()/today.getFullYear()';
+
+const buildWeatherToday = function(cityWeatherData) {
+    const weatherToday = cityWeatherData.current;
+    today = new Date();
+    console.log('weather today', weatherToday);
+    console.log(city);
+
+    // create parent div
+    const weatherTodayCardEl = document.createElement('div');
+    weatherTodayCardEl.setAttribute('id', 'weather-today');
+
+    const headerEl = document.createElement('h2');
+
+    const todayz = `${city} (${dateFormat})`;
+    console.log(todayz);
+    headerEl.textContent = `${city} (${dateFormat})`;
+}
+
+// call getCityWeather on most recent city, or feed city if none
+// this will be to initialize page
