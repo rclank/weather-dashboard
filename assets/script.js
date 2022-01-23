@@ -3,10 +3,6 @@
 // loads these to search history buttons
 // maybe loads most recent search by default? this would require pinging api
 
-// upon search click
-// ping api with search term
-// return data plugged in to appropriate elements
-
 // DOM elements
 const searchFormEl =  document.querySelector('#search-form');
 const cityInputEl = document.querySelector('#search');
@@ -18,6 +14,15 @@ const usaIsoCode = '840';
 let city;
 let today;
 
+// page load
+// check localstorage for recent searches
+// load to recent searches div if so
+
+
+// upon search click
+// ping api with search term
+// return data plugged in to appropriate elements
+
 // upon search
 const formSubmitHandler = function(event) {
     event.preventDefault();
@@ -26,6 +31,9 @@ const formSubmitHandler = function(event) {
     city = cityInputEl.value.trim();
 
     if (city) {
+        // build function for uppercasing city first letter
+
+        localStorage.setItem()
         getCityWeather(city);
         cityInputEl.value = "";
     } else {
